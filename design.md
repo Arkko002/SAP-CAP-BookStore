@@ -1,4 +1,21 @@
-# Design
+# Monolith Design
+
+## Stories
+1. As a customer I want to order books
+2. As a customer I want to filter books based on genre and author
+3. As a customer I want my actions to be persistent between sessions
+4. As an author I want to be able to add my books and tag them with genres
+5. As an author I want to be able to see how many people viewed and bought my book
+6. As an author I want to be able to remove my book from the store
+
+## System operations
+> **_NOTE:_**  CRUD operations on schema models are handled by CAP.
+
+placeOrder(customer, array of (book, quantity))
+analyzeBookSales(book)
+
+
+# Microservice Design TODO
 
 ## Stories
 1. As a customer I want to order books

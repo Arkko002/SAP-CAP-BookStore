@@ -1,0 +1,2 @@
+GET <service_url>/Books
+Authorization: Basic catuser:abcd1234
