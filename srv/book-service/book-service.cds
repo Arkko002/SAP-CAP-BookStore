@@ -8,10 +8,10 @@ service BooksService {
         excluding {
             description,
             soldNumber,
-	    sold,
+            sold,
         };
 
-    entity Books  as
+    entity Books       as
         projection on bookstore.Books {
             *
         }
@@ -20,6 +20,28 @@ service BooksService {
             modifiedBy,
         };
 
-    action submitOrder(book: Books:ID, quantity: Integer);
-    event OrderedBook : {bookId: Books:ID; quantity: Integer; buyer: User}
+    action submitOrder(book : Books:ID, quantity : Integer);
+
+    event OrderedBook {
+        bookId   : Books:ID;
+        quantity : Integer;
+        buyer    : User
+    };
+
+    event SearchByUser {
+        userId   : User:ID;
+        value    : String;
+        category : SearchCategory;
+    };
+
+    event ViewByUser {
+        userId : User:ID;
+        bookId : Books:ID;
+    };
+}
+
+type SearchCategory : String enum {
+    title;
+    author;
+    genre;
 }

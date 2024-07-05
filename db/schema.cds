@@ -81,6 +81,21 @@ entity Orders : cuid, managed {
     2. How does Amazon do it? Research
 */
 
-entity Rank : cuid, managed {
+entity UserRank : cuid, managed {
+    prefered : String;
+    score    : Integer;
+}
+
+entity UserToUserRank : cuid, managed {
+    first  : User;
+    second : User;
+    score  : Integer;
+}
+
+entity UserToItemRank : cuid, managed {
+
+}
+
+entity ItemToItemRank : cuid, managed {
 
 }
