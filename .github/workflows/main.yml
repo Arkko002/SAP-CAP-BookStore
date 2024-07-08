@@ -1,14 +1,65 @@
-name: NodeJS CI/CD
-on: [push]
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 jobs:
-  test-and-build:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 18.x]
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
       with:
-        node-version: 18
+        node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npx @cap-js/cds-typer "*" --outputDirectory @cds-models
-    - run: npm test
-    - run: npm build
+    - run: npm run lint
+    - run: npm run build --if-present
+    - run: npm run test
+
+# TODO: Integration tests
+#    - name: Run integration tests - Manage Travels
+#      working-directory: ./app/travel_processor
+#      run: |
+#        npm ci
+#        npm run test:node -- --ci
+
+#    - name: Run integration tests - Analyze Bookings
+#      working-directory: ./app/travel_analytics
+#      run: |
+#        npm ci
+#        npm run test:node -- --ci
+
+
+
+  deployment:
+    name: Deploy
+    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'deploy') }}  # run only if label is set
+    uses: ./.github/workflows/deploy-btp.yml
+    with:
+      cf-space: staging-${{ github.head_ref || github.ref_name }}
+      role-collection: sflight-admin-staging-${{ github.head_ref || github.ref_name }}  # must match to mta.yaml
+    secrets:
+       username: ${{ secrets.CF_USERNAME }}
+       password: ${{ secrets.CF_PASSWORD }}
+       grant-users: ${{ secrets.GRANT_USERS }}
+#
+#  e2etest:
+#    name: E2E Tests
+#    runs-on: ubuntu-latest
+#    needs: deployment
+#    steps:
+#    - name: More UI tests
+#      run: |
+#        echo ${{ needs.deployment.outputs.ui_app_url }}
