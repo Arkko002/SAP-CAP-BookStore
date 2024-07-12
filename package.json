@@ -9,39 +9,67 @@
     "@sap/cds": "^7",
     "@sap/cds-hana": "^2",
     "@sap/cds-sqlite": "^1.24.1",
+    "@sap/cds-dk": "^7",
     "express": "^4",
     "jest": "^29.7.0",
     "prettier": "^3.3.2",
+    "sqlite3": "^5.1.7",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "@sap/xssec": "^3"
   },
   "devDependencies": {
     "@cap-js/cds-typer": ">=0.1",
     "@cap-js/sqlite": "^1.7.2",
+    "@eslint/js": "^8.56.0",
     "@sap/eslint-plugin-cds": "^3.0.4",
-    "eslint": "^9"
+    "eslint": "^8.56.0",
+    "globals": "^15.8.0",
+    "typescript-eslint": "^7.15.0"
   },
   "scripts": {
-    "build": "tsc && cp -r @cds-models dist",
-    "start": "cds-ts serve",
-    "watch": "cds-ts watch",
-    "test": "jest"
+    "start": "cds run",
+    "build": "tsc && ts-node tools/copyAssets",
+    "build:cf": "npm run build:cds && npm run cleanup:ts && npm run build:ts",
+    "build:ts": "tsc",
+    "build:cds": "cds build --production",
+    "gen:mta": "npx mbt build -t gen --mtar mta.tar",
+    "lint": "eslint -c ./srv",
+    "watch": "cds-ts watch --open",
+    "test": "jest",
+    "dev:db-sync": "cds deploy --to sqlite:raprincis.db",
+    "dev:db-deploy": "npx sqlite3 raprincis.db .dump && sqlite3 raprincis.db .tables",
+    "cleanup:ts": "npx rimraf gen/srv/srv/**/*.ts",
+    "dev:db": "npm run dev:db-sync && npm run dev:db-deploy"
   },
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
   },
   "cds": {
     "requires": {
-      "db": {
-        "[development]": {
-          "kind": "sqlite",
-          "impl": "@cap-js/sqlite",
-          "credentials": {
-            "url": "memory"
+      "auth": {
+        "kind": "mocked",
+        "users": {
+          "content-manager": {
+            "tenant": "t1",
+            "roles": [
+              "cds.Subscriber",
+              "admin"
+            ]
           }
+        }
+      },
+      "db": {
+        "impl": "@cap-js/sqlite",
+        "credentials": {
+          "url": ":memory:"
         },
-        "[production]": {
+        "kind": "sqlite"
+      },
+      "[production]": {
+        "auth": "xsuaa",
+        "db": {
           "kind": "hana",
           "impl": "@sap/cds-hana",
           "deploy-format": "hdbtable"

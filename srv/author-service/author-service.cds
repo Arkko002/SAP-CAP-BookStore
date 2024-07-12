@@ -12,7 +12,7 @@ service AuthorService {
         projection on bookstore.Books {
             title,
             description,
-            tags,
+            genres,
             language,
             author,
         };

@@ -19,14 +19,16 @@ using {
 entity Books : cuid, managed {
     title       : localized String      @mandatory  @assert.unique;
     description : localized String;
-    tags        : Association to Genres @mandatory;
+    genres      : Association to Genres @mandatory;
     author      : Association to Authors            @mandatory  @assert.target;
-    language    : Language              @readonly;
+    language    : Language              @mandatory  @readonly;
     sold        : Integer;
     stock       : Integer;
-    price       : Decimal;
-    currency    : Currency;
+    price       : Decimal               @mandatory;
+    currency    : Currency              @mandatory;
     image       : LargeBinary           @Core.MediaType: 'image/jpg';
+
+    viewHistory: Association to many BookViews on viewHistory.book = $self;
 }
 
 entity Genres : cuid, CodeList {
@@ -48,20 +50,24 @@ entity Authors : cuid, managed {
 
 entity Users : cuid, managed {
     email         :      String  @readonly  @assert.unique  @assert.format: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    orders        :      Association to many Orders;
+    orders        :      Association to many Orders on orders.buyer = $self;
     searchHistory : many String;
-    viewHistory   :      Association to many Books;
+    viewHistory   :      Association to many BookViews on viewHistory.user = $self;
 }
 
+entity BookViews : cuid {
+    key user: Association to Users;
+    key book: Association to Books;
+}
 
 entity Orders : cuid, managed {
-    items    : Composition of many {
+    buyer    : Association to Users;
+    items    : Composition of many  {
                    key ID       : UUID;
                        book     : Association to Books;
                        quantity : Integer;
                        price    : Double;
                };
-    buyer    : User;
     currency : Currency
 }
 

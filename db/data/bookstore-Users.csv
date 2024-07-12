@@ -1,0 +1,4 @@
+ID,email,searchHistory,createdAt,createdBy,modifiedAt,modifiedBy
+1,email1@leverx.com,[],01-01-2002 00:00,admin,01-01-2002 00:00,admin
+2,email2@leverx.com,[],02-02-2002 00:00,admin,02-02-2002 00:00,admin
+3,email3@leverx.com,[],03-03-2002 00:00,admin,03-03-2002 00:00,admin

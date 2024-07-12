@@ -1,7 +1,11 @@
-const cds = require('@sap/eslint-plugin-cds')
+import cds from '@sap/eslint-plugin-cds'
+import pluginJs from "@eslint/js";
+import tseslint from "typescript-eslint";
 
 module.exports = [
-  cds.configs.recommended,
+  ...cds.configs.recommended,
+  ...pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     plugins: {
       '@sap/cds': cds

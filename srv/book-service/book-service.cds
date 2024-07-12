@@ -29,13 +29,13 @@ service BooksService {
     };
 
     event SearchByUser {
-        userId   : User:ID;
+        userId   : User;
         value    : String;
         category : SearchCategory;
     };
 
     event ViewByUser {
-        userId : User:ID;
+        userId : User;
         bookId : Books:ID;
     };
 }
