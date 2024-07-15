@@ -1,5 +1,5 @@
-using {bookstore} from '../../db/schema';
-using {BooksService} from './book-service.cds';
+using {bookstore} from '../../../db/schema';
+using {BooksService} from '../controller/book-service';
 
 annotate bookstore.Books with @restrict: [
     {

@@ -1,4 +1,4 @@
-using {bookstore} from '../../db/schema';
+using {bookstore} from '../../../db/schema';
 
 @path: 'service/author'
 service AuthorService {

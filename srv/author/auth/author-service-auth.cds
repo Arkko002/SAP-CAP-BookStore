@@ -1,4 +1,4 @@
-using {bookstore} from '../../db/schema';
+using {bookstore} from '../../../db/schema';
 
 annotate bookstore.Authors with @restricts: [
     {

@@ -1,4 +1,4 @@
-using {bookstore} from '../../db/schema.cds';
+using {bookstore} from '../../../db/schema.cds';
 
 @path: 'service/admin'
 service AdminService {

@@ -28,7 +28,8 @@ entity Books : cuid, managed {
     currency    : Currency              @mandatory;
     image       : LargeBinary           @Core.MediaType: 'image/jpg';
 
-    viewHistory: Association to many BookViews on viewHistory.book = $self;
+    viewHistory : Association to many BookViews
+                      on viewHistory.book = $self;
 }
 
 entity Genres : cuid, CodeList {
@@ -50,25 +51,33 @@ entity Authors : cuid, managed {
 
 entity Users : cuid, managed {
     email         :      String  @readonly  @assert.unique  @assert.format: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    orders        :      Association to many Orders on orders.buyer = $self;
+    orders        :      Association to many Orders
+                             on orders.buyer = $self;
     searchHistory : many String;
-    viewHistory   :      Association to many BookViews on viewHistory.user = $self;
+    viewHistory   :      Association to many BookViews
+                             on viewHistory.user = $self;
+
+    preferences   :      Association to many PreferenceRanks
+                             on preferences.user = $self;
 }
 
 entity BookViews : cuid {
-    key user: Association to Users;
-    key book: Association to Books;
+    key user : Association to one Users;
+    key book : Association to one Books;
 }
 
 entity Orders : cuid, managed {
-    buyer    : Association to Users;
-    items    : Composition of many  {
-                   key ID       : UUID;
-                       book     : Association to Books;
-                       quantity : Integer;
-                       price    : Double;
-               };
-    currency : Currency
+    buyer                 : Association to one Users;
+    @cds.autoexpose items : Composition of many OrderItems
+                                on items.order = $self;
+    currency              : Currency
+}
+
+entity OrderItems : cuid {
+    order    : Association to one Orders;
+    book     : Association to Books;
+    quantity : Integer;
+    price    : Double;
 }
 
 /* TODO:
@@ -87,21 +96,15 @@ entity Orders : cuid, managed {
     2. How does Amazon do it? Research
 */
 
-entity UserRank : cuid, managed {
+// TODO: Generalize prefered value into something that can be stored verbatim and later matched using custom logic depending on needs
+entity PreferenceRanks : cuid, managed {
+    user     : Association to one Users;
     prefered : String;
     score    : Integer;
 }
 
-entity UserToUserRank : cuid, managed {
-    first  : User;
-    second : User;
-    score  : Integer;
-}
-
-entity UserToItemRank : cuid, managed {
-
-}
-
-entity ItemToItemRank : cuid, managed {
-
+entity UserToUserPreferenceRanks : managed {
+    key first  : Association to one Users;
+    key second : Association to one Users;
+        score  : Integer;
 }

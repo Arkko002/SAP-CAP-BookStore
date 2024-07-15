@@ -9,7 +9,8 @@ build-parameters:
     - builder: custom
       commands:
         - npm ci
-        - npm run build:cf 
+        - npm run build:cf
+        - npx @cap-js/cds-typer "*" --outputDirectory gen/srv/@cds-models
 modules:
   - name: btp-cap-tutorial-srv
     type: nodejs

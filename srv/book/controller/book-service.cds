@@ -1,9 +1,9 @@
-using {bookstore} from '../../db/schema';
+using {bookstore} from '../../../db/schema';
 using {User} from '@sap/cds/common';
 
 @path: 'service/books'
 service BooksService {
-    entity ListOfBooks as
+    entity ListOfBooks    as
         projection on bookstore.Books
         excluding {
             description,
@@ -11,7 +11,7 @@ service BooksService {
             sold,
         };
 
-    entity Books       as
+    entity Books          as
         projection on bookstore.Books {
             *
         }
@@ -20,22 +20,31 @@ service BooksService {
             modifiedBy,
         };
 
+    entity Users          as
+        projection on bookstore.Users {
+            key ID,
+                searchHistory,
+                viewHistory,
+                preferences,
+        };
+
+    entity PreferenceRank as projection on bookstore.PreferenceRanks;
     action submitOrder(book : Books:ID, quantity : Integer);
 
     event OrderedBook {
         bookId   : Books:ID;
         quantity : Integer;
-        buyer    : User
+        userId   : UUID;
     };
 
     event SearchByUser {
-        userId   : User;
+        userId   : UUID;
         value    : String;
         category : SearchCategory;
     };
 
     event ViewByUser {
-        userId : User;
+        userId : UUID;
         bookId : Books:ID;
     };
 }
