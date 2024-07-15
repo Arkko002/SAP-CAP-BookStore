@@ -25,6 +25,7 @@
     "@cap-js/sqlite": "^1.7.2",
     "@eslint/js": "^8.56.0",
     "@sap/eslint-plugin-cds": "^3.0.4",
+    "@sap/ux-specification": "^1.108.33",
     "eslint": "^8.56.0",
     "globals": "^15.8.0",
     "typescript-eslint": "^7.15.0"
@@ -43,7 +44,8 @@
     "dev:db-sync": "cds deploy --to sqlite:raprincis.db",
     "dev:db-deploy": "npx sqlite3 raprincis.db .dump && sqlite3 raprincis.db .tables",
     "cleanup:ts": "npx rimraf gen/srv/srv/**/*.ts",
-    "dev:db": "npm run dev:db-sync && npm run dev:db-deploy"
+    "dev:db": "npm run dev:db-sync && npm run dev:db-deploy",
+    "watch-btp-cap-tutorial.Bookstore": "cds watch --open btp-cap-tutorial.Bookstore/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "imports": {
     "#cds-models/*": "./srv/@cds-models/*/index.js",
@@ -79,6 +81,8 @@
         }
       }
     }
-  }
+  },
+  "sapux": [
+    "app/btp-cap-tutorial.Bookstore"
+  ]
 }
-

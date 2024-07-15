@@ -1,4 +1,4 @@
-ID,buyer,currency_code,createdAt,createdBy,modifiedAt,modifiedBy
+ID,buyer_ID,currency_code,createdAt,createdBy,modifiedAt,modifiedBy
 1,1,PLN,01-01-2004 00:00,system,01-01-2004 00:00,system
 2,2,PLN,02-02-2004 00:00,system,02-02-2004 00:00,system
 3,3,PLN,03-03-2004 00:00,system,03-03-2004 00:00,system
