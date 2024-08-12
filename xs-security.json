@@ -3,6 +3,11 @@
     {
       "name": "$XSAPPNAME.admin",
       "description": "admin"
+    },
+    {
+      "name": "$XSAPPNAME.PersonalDataManagerUser",
+      "description": "Authority for Personal Data Manager",
+      "grant-as-authority-to-apps": ["$XSSERVICENAME(pdm)"]
     }
   ],
   "attributes": [],
@@ -10,11 +15,10 @@
     {
       "name": "admin",
       "description": "generated",
-      "scope-references": [
-        "$XSAPPNAME.admin"
-      ],
+      "scope-references": ["$XSAPPNAME.admin"],
       "attribute-references": []
     }
   ],
   "authorities-inheritance": false
 }
+

@@ -72,12 +72,26 @@
         },
         "kind": "sqlite"
       },
+      "audit-log": {
+        "handle": [
+          "READ",
+          "WRITE"
+        ],
+        "[development]": {
+          "impl": "@cap-js/audit-logging/srv/audit-log-to-console",
+          "outbox": false
+        }
+      },
       "[production]": {
         "auth": "xsuaa",
         "db": {
           "kind": "hana",
           "impl": "@sap/cds-hana",
           "deploy-format": "hdbtable"
+        },
+        "audit-log": {
+          "impl": "@cap-js/audit-logging/srv/audit-log-to-restv2",
+          "outbox": true
         }
       }
     }
@@ -86,3 +100,4 @@
     "app/btp-cap-tutorial.Bookstore"
   ]
 }
+

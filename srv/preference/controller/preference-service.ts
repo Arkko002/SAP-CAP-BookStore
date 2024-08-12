@@ -5,6 +5,7 @@ import {
 } from "../repository/preference-repository";
 import { PreferenceRank } from "../../@cds-models/bookstore";
 
+// TODO: Would this be internal service (protocol: none) or will it need to communicate with HANA outside?
 export class PreferenceService extends cds.ApplicationService {
   private preferenceRepository: PreferenceRepository =
     new PreferenceRepository();
