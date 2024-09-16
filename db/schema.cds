@@ -3,7 +3,6 @@ namespace bookstore;
 using {
     Currency,
     Language,
-    User,
     cuid,
     managed,
     sap.common.CodeList
@@ -53,6 +52,7 @@ entity Users : cuid, managed {
     email         :      String  @readonly  @assert.unique  @assert.format: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     orders        :      Association to many Orders
                              on orders.buyer = $self;
+    cart          :      Association to one Carts;
     searchHistory : many String;
     viewHistory   :      Association to many BookViews
                              on viewHistory.user = $self;
@@ -66,11 +66,19 @@ entity BookViews : cuid {
     key book : Association to one Books;
 }
 
+// TODO: Association to Payement (at create time and async processing, at later time?)
 entity Orders : cuid, managed {
     buyer                 : Association to one Users;
     @cds.autoexpose items : Composition of many OrderItems
                                 on items.order = $self;
-    currency              : Currency
+    currency              : Currency;
+    priceTotal            : Integer;
+    status                : String enum {
+        new;
+        inProcessing;
+        processed;
+        sent;
+    }
 }
 
 entity OrderItems : cuid {
@@ -78,6 +86,21 @@ entity OrderItems : cuid {
     book     : Association to Books;
     quantity : Integer;
     price    : Double;
+}
+
+entity Payments : cuid, managed {
+    order    : Association to one Orders
+                   on order.ID = order_ID;
+    order_ID : Integer;
+    amount   : Double;
+    currency : Currency;
+    status   : String enum {
+        new;
+        inProcessing;
+        paidPartially;
+        paidFully;
+        error;
+    }
 }
 
 /* TODO:
@@ -107,4 +130,20 @@ entity UserToUserPreferenceRanks : managed {
     key first  : Association to one Users;
     key second : Association to one Users;
         score  : Integer;
+}
+
+entity Carts : cuid {
+    user                  : Association to one Users;
+    @cds.autoexpose items : Composition of many CartItems
+                                on items.cart = $self;
+}
+
+entity CartItems : cuid {
+    cart     : Association to one Carts;
+    item     : Association to Books
+
+                   on item.ID = item_ID;
+    item_ID  : Integer;
+    quantity : Integer;
+    price    : Double;
 }

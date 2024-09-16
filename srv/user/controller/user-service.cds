@@ -8,4 +8,5 @@ service UserService {
     }
 
     action login() returns me;
+    action create();
 }

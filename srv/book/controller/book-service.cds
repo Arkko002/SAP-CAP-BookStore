@@ -1,5 +1,4 @@
 using {bookstore} from '../../../db/schema';
-using {User} from '@sap/cds/common';
 
 @path: 'service/books'
 service BooksService {
@@ -36,6 +35,7 @@ service BooksService {
         quantity : Integer;
         userId   : UUID;
     };
+
 
     event SearchByUser {
         userId   : UUID;
