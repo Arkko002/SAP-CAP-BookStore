@@ -11,5 +11,8 @@
     "scripts": {
         "deploy-config": "npx -p @sap/ux-ui5-tooling fiori add deploy-config cf"
     },
-    "devDependencies": { }
+    "dependencies": {
+        "@cap-js/audit-logging": "^0.8.0",
+        "@sap/xssec": "^4.1.3"
+    }
 }
